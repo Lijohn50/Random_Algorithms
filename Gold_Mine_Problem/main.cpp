@@ -41,14 +41,103 @@ int main(){
 		}
 	}
 	int max_gold = 0;
+	int position;
 	for(int i = 0; i < row; i++){
 		
 		if(max_gold <= dp[i][column - 1]){
 			
 			max_gold = dp[i][column - 1];
+			position = i;
 		}
 	}
 	cout << max_gold << endl;
 	
+	int j = column - 2;
+	int path[column];
+	path[column - 1] = dp[position][column - 1];
+
+	int path_row[column];
+	int path_column[column];
 	
+	int r = column - 1;
+	int c = column - 1;
+	
+	path_row[r] = position;
+	path_column[c] = c;
+	
+	while(j >= 0){
+		
+		if(position == 0){
+			
+			path[j] = max(dp[position][j], dp[position + 1][j]);
+			if(path[j] == dp[position][j]){
+				
+				r--;
+				c--;
+				path_row[r] = position;
+				path_column[c] = j;
+				j--;
+			}else{
+				
+				r--;
+				c--;
+				path_row[r] = position + 1;
+				path_column[c] = j;
+				position++;
+				j--;
+			}
+		}else if(position == row - 1){
+			
+			path[j] = max(dp[position][j], dp[position - 1][j]);
+			if(path[j] == dp[position][j]){
+				
+				r--;
+				c--;
+				path_row[r] = position;
+				path_column[c] = j;
+				j--;
+			}else{
+				
+				r--;
+				c--;
+				path_row[r] = position - 1;
+				path_column[c] = j;
+				position--;
+				j--;
+			}
+		}else{
+			
+			path[j] = max(dp[position - 1][j], max(dp[position][j], dp[position + 1][j]));
+			if(path[j] == dp[position - 1][j]){
+				
+				r--;
+				c--;
+				path_row[r] = position - 1;
+				path_column[c] = j;
+				position--;
+				j--;
+			}else if(path[j] == dp[position][j]){
+				
+				r--;
+				c--;
+				path_row[r] = position;
+				path_column[c] = j;
+				j--;
+			}else if(path[j] == dp[position + 1][j]){
+				
+				r--;
+				c--;
+				path_row[r] = position + 1;
+				path_column[c] = j;
+				position++;
+				j--;
+			}
+		}
+	}
+	
+	for(int i = 0; i < column; i++){
+		
+		cout << mine[path_row[i]][path_column[i]] << endl;
+	}
+
 }
